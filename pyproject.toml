@@ -1,3 +1,4 @@
+
 [project]
 name = "palm-mind-rag"
 version = "0.1.0"
@@ -31,10 +32,30 @@ dev = [
     "aiosqlite>=0.20",
 ]
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "I",    # import sorting
+    "UP",   # pyupgrade
+    "B",    # bugbear
+]
+
 [tool.mypy]
 python_version = "3.11"
 strict = true
-plugins = ["pydantic.mypy","sqlalchemy.ext.mypy.plugin"]
+plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
 files = ["app", "tests"]
 warn_unreachable = true
 warn_unused_ignores = true
@@ -46,7 +67,6 @@ show_error_codes = true
 pretty = true
 
 [[tool.mypy.overrides]]
-# third-party packages without complete type stubs
 module = ["qdrant_client.*", "pypdf.*"]
 ignore_missing_imports = true
 
@@ -58,7 +78,4 @@ warn_required_dynamic_aliases = true
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+addopts = "-ra --strict-markers --cov=app --cov-report=term-missing"

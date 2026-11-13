@@ -13,7 +13,7 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] Verify all three containers start and are reachable
 
 ## Phase 1: Core scaffolding
-- [ ] `app/core/config.py`: `Settings` via pydantic-settings, with validation for all env vars
+- [x] `app/core/config.py`: `Settings` via pydantic-settings, with validation for all env vars
 - [ ] `app/core/logging.py`: structured logging setup
 - [ ] `app/core/exceptions.py`: domain exceptions (`UnsupportedFileType`, `FileTooLarge`, `IngestionFailed`, `SessionNotFound`, `BookingValidationError`, `ProviderError`)
 - [ ] `app/main.py`: FastAPI app factory, router registration, exception handlers, `/health` endpoint
