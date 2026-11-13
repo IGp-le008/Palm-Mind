@@ -3,10 +3,23 @@
 from __future__ import annotations
 
 import uuid
+from datetime import date as dt_date
 from datetime import datetime
+from datetime import time as dt_time
 from enum import StrEnum
 
-from sqlalchemy import BigInteger, DateTime, Integer, String, Text, Uuid, func
+from sqlalchemy import (
+    BigInteger,
+    Date,
+    DateTime,
+    Integer,
+    String,
+    Text,
+    Time,
+    UniqueConstraint,
+    Uuid,
+    func,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -19,6 +32,13 @@ class DocumentStatus(StrEnum):
     PROCESSING = "processing"
     COMPLETED = "completed"
     FAILED = "failed"
+
+
+class BookingStatus(StrEnum):
+    """Lifecycle of an interview booking. Rows are written only after the user confirms."""
+
+    CONFIRMED = "confirmed"
+    CANCELLED = "cancelled"
 
 
 class ChunkingStrategyName(StrEnum):
@@ -49,4 +69,26 @@ class Document(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class InterviewBooking(Base):
+    """A confirmed interview slot created through the chat booking flow."""
+
+    __tablename__ = "interview_bookings"
+    __table_args__ = (
+        UniqueConstraint("email", "date", "time", name="uq_interview_booking_slot"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    session_id: Mapped[str] = mapped_column(String(64), index=True)
+    name: Mapped[str] = mapped_column(String(120))
+    email: Mapped[str] = mapped_column(String(254))
+    date: Mapped[dt_date] = mapped_column(Date)
+    time: Mapped[dt_time] = mapped_column(Time)
+    status: Mapped[str] = mapped_column(
+        String(20), default=BookingStatus.CONFIRMED.value
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
     )
