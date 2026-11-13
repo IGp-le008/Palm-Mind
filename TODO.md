@@ -14,10 +14,10 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 
 ## Phase 1: Core scaffolding
 - [x] `app/core/config.py`: `Settings` via pydantic-settings, with validation for all env vars
-- [ ] `app/core/logging.py`: structured logging setup
-- [ ] `app/core/exceptions.py`: domain exceptions (`UnsupportedFileType`, `FileTooLarge`, `IngestionFailed`, `SessionNotFound`, `BookingValidationError`, `ProviderError`)
-- [ ] `app/main.py`: FastAPI app factory, router registration, exception handlers, `/health` endpoint
-- [ ] `app/core/container.py`: dependency wiring (settings, DB session, Redis client, vector store, providers)
+- [x] `app/core/logging.py`: structured logging setup
+- [U] `app/core/exceptions.py`: domain exceptions (`UnsupportedFileType`, `FileTooLarge`, `IngestionFailed`, `SessionNotFound`, `BookingValidationError`, `ProviderError`)
+- [U] `app/main.py`: FastAPI app factory, router registration, exception handlers, `/health` endpoint
+- [U] `app/core/container.py`: dependency wiring (settings, DB session, Redis client, vector store, providers)
 - [ ] Database engine and session factory (`app/db/session.py`)
 - [ ] Alembic initialised, first migration created
 
