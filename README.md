@@ -65,8 +65,8 @@ No FAISS, no Chroma, no RetrievalQAChain, no UI.
 | ORM and migrations | SQLAlchemy 2.x (async), Alembic | Industry standard |
 | Vector database | Qdrant (Docker) | Free, local, simple API. Pinecone/Weaviate/Milvus also allowed |
 | Chat memory | Redis (`redis.asyncio`) | Fast TTL-based session storage |
-| Embeddings | OpenAI `text-embedding-3-small` (or `sentence-transformers/all-MiniLM-L6-v2` for free local use) | Good quality, cheap |
-| LLM | OpenAI `gpt-4o-mini` (or Groq / Gemini free tier) | Function calling for booking extraction |
+| Embeddings | Nvidia `nvidia/nemotron-3.5-embed-1b:free` (or `sentence-transformers/all-MiniLM-L6-v2` for free local use) | Good quality, cheap |
+| LLM | Nvidia `nvidia/nemotron-3.5-lightning:free` (or OpenAI / Groq / Gemini free tier) | Function calling for booking extraction |
 | PDF parsing | pypdf | Pure Python, no system deps |
 | HTTP client | httpx | Async, used for provider calls |
 | Testing | pytest, pytest-asyncio, httpx.AsyncClient | Standard |
@@ -196,7 +196,7 @@ Dev:
 | `OPENAI_API_KEY` | `sk-...` | Embeddings and chat |
 | `EMBEDDING_MODEL` | `nvidia/nemotron-3.5-embed-1b:free` | Embedding model |
 | `EMBEDDING_DIM` | `1536` | Must match the model |
-| `CHAT_MODEL` | `gpt-4o-mini` | Generation model |
+| `CHAT_MODEL` | `nvidia/nemotron-3.5-lightning:free` | Generation model |
 | `MAX_UPLOAD_MB` | `10` | Upload size limit |
 | `CHAT_HISTORY_TURNS` | `10` | Turns kept in Redis |
 | `CHAT_TTL_SECONDS` | `86400` | Session expiry |

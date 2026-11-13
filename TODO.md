@@ -9,7 +9,7 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] Initialise project with `uv init` and create `pyproject.toml` with the dependency groups listed in README
 - [x] Add `.gitignore`, `.env.example`, `ruff.toml`, `mypy` config (strict)
 - [x] Write `docker-compose.yml` for PostgreSQL, Redis, and Qdrant
-- [ ] Create `docs/DECISIONS.md` and record the stack choices (Qdrant, Redis, PostgreSQL, embedding and LLM provider)
+- [x] Create `docs/DECISIONS.md` and record the stack choices (Qdrant, Redis, PostgreSQL, embedding and LLM provider)
 - [ ] Verify all three containers start and are reachable
 
 ## Phase 1: Core scaffolding
@@ -36,7 +36,7 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [ ] `SemanticChunker` (size and overlap configurable) with unit tests
 - [ ] `RecursiveChunker` (paragraph, sentence, then character fallback) with unit tests
 - [ ] Chunker factory that maps the request value to an implementation
-- [ ] `EmbeddingProvider` protocol and first implementation (OpenAI `text-embedding-3-small` or local `sentence-transformers`)
+- [ ] `EmbeddingProvider` protocol and first implementation (OpenAI `nvidia/nemotron-3.5-embed-1b:free` or local `sentence-transformers`)
 - [ ] `VectorStore` protocol and `QdrantVectorStore` (create collection if missing, upsert, search with optional document filter, delete by document id)
 - [ ] `IngestionService` orchestrating validate -> save metadata (pending) -> extract -> chunk -> embed -> upsert -> mark completed or failed
 - [ ] Batch embedding (configurable batch size) with retry and backoff on provider errors
@@ -47,7 +47,7 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [ ] Integration tests for upload of a txt and a pdf, for both strategies, and for invalid input
 
 ## Phase 4: Custom RAG pipeline
-- [ ] `ChatModel` protocol and implementation (OpenAI `gpt-4o-mini` or Groq / Gemini equivalent)
+- [ ] `ChatModel` protocol and implementation (`Nvidia` `nvidia/nemotron-3.5-lightning:free` or OpenAI / Groq / Gemini equivalent)
 - [ ] `ChatMemory` protocol and `RedisChatMemory` (append turn, get last N turns, TTL refresh, clear)
 - [ ] Session id generation and validation
 - [ ] Query condensation prompt: rewrite follow-up question into a standalone query using history
