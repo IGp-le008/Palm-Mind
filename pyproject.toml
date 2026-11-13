@@ -32,9 +32,28 @@ dev = [
 ]
 
 [tool.mypy]
-strict = true
 python_version = "3.11"
-plugins = []
+strict = true
+plugins = ["pydantic.mypy","sqlalchemy.ext.mypy.plugin"]
+files = ["app", "tests"]
+warn_unreachable = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+disallow_any_explicit = true
+disallow_any_generics = true
+no_implicit_reexport = true
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.overrides]]
+# third-party packages without complete type stubs
+module = ["qdrant_client.*", "pypdf.*"]
+ignore_missing_imports = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
