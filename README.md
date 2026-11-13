@@ -1,13 +1,15 @@
-# Palm Mind RAG Backend
+## Introduction 
 
-A FastAPI backend with two REST APIs:
+A production-style backend AI assistant engineered with custom Retrieval-Augmented Generation (RAG), persistent conversational memory, and automated interview scheduling. Built from the ground up without high-level abstractions, the system ingests multi-format company documentation for context-aware Q&A while using structured LLM extraction to validate and persist interview bookings via a REST API.
 
-1. **Document Ingestion API**: upload PDF/TXT files, chunk them with a selectable strategy, embed, store vectors in Qdrant, and save metadata in PostgreSQL.
-2. **Conversational RAG API**: custom multi-turn RAG with Redis chat memory and LLM-driven interview booking.
+This RAG will be responsible for:
+1. Document processing and ingestion
+2. Vector database and semantic search
+3. Custom RAG for ground answering
+4. Conversational memeory
+5. Interview appointment booking system
 
-No FAISS, no Chroma, no RetrievalQAChain, no UI.
-
-## UI Schema
+## Schema
 
 ```mermaid
 flowchart TD
@@ -38,6 +40,16 @@ flowchart TD
     VAL --> BOOK[("PostgreSQL Booking Table")]
     BOOK --> RESP
   ```
+
+# Palm Mind RAG Backend
+
+A FastAPI backend with two REST APIs:
+
+1. **Document Ingestion API**: upload PDF/TXT files, chunk them with a selectable strategy, embed, store vectors in Qdrant, and save metadata in PostgreSQL.
+2. **Conversational RAG API**: custom multi-turn RAG with Redis chat memory and LLM-driven interview booking.
+
+No FAISS, no Chroma, no RetrievalQAChain, no UI.
+
 
 
 ---
@@ -182,7 +194,7 @@ Dev:
 | `QDRANT_URL` | `http://localhost:6333` | Vector DB |
 | `QDRANT_COLLECTION` | `documents` | Collection name |
 | `OPENAI_API_KEY` | `sk-...` | Embeddings and chat |
-| `EMBEDDING_MODEL` | `text-embedding-3-small` | Embedding model |
+| `EMBEDDING_MODEL` | `nvidia/nemotron-3.5-embed-1b:free` | Embedding model |
 | `EMBEDDING_DIM` | `1536` | Must match the model |
 | `CHAT_MODEL` | `gpt-4o-mini` | Generation model |
 | `MAX_UPLOAD_MB` | `10` | Upload size limit |
@@ -224,7 +236,7 @@ uv run uvicorn app.main:app --reload --port 8000
 ```
 
 - Health check: `GET http://localhost:8000/health`
-- Interactive docs (auto-generated, not a UI feature you build): `http://localhost:8000/docs`
+- Interactive docs: `http://localhost:8000/docs`
 
 ### 4.5 Quality checks
 
