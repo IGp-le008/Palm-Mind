@@ -24,6 +24,7 @@ def __post_init__(self):
 @dataclass(frozen=True)
 class Settings:
     log_level: str = os.getenv("LOG_LEVEL", "INFO").upper()
+    app_env:srt = os.getenv("APP_ENV","local").lower()
     # Model providers (OpenRouter)
     chat_api_key: str = os.getenv("CHAT_API_KEY", "")
     embedding_api_key: str = os.getenv("EMBEDDING_API_KEY", "")
