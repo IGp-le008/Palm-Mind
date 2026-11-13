@@ -10,7 +10,7 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] Add `.gitignore`, `.env.example`, `ruff.toml`, `mypy` config (strict)
 - [x] Write `docker-compose.yml` for PostgreSQL, Redis, and Qdrant
 - [x] Create `docs/DECISIONS.md` and record the stack choices (Qdrant, Redis, PostgreSQL, embedding and LLM provider)
-- [ ] Verify all three containers start and are reachable
+- [x] Verify all three containers start and are reachable
 
 ## Phase 1: Core scaffolding
 - [ ] `app/core/config.py`: `Settings` via pydantic-settings, with validation for all env vars
