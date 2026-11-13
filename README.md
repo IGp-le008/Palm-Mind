@@ -7,6 +7,39 @@ A FastAPI backend with two REST APIs:
 
 No FAISS, no Chroma, no RetrievalQAChain, no UI.
 
+## UI Schema
+
+```mermaid
+flowchart TD
+    U["Client / API Consumer"]
+
+    U --> API["FastAPI Backend"]
+
+    API --> ING["Document Ingestion API"]
+    API --> CHAT["Conversational RAG API"]
+
+    ING --> EXT["PDF / TXT Extraction"]
+    EXT --> CH["Chunking Strategy"]
+    CH --> EMB["Embedding Model"]
+    EMB --> QD[("Qdrant")]
+    ING --> PG[("PostgreSQL")]
+
+    CHAT --> RED[("Redis")]
+    RED --> INT["Intent Detection / Query Contextualization"]
+
+    INT -->|Document Query| RET["Qdrant Retrieval"]
+    RET --> PROMPT["Custom RAG Prompt"]
+    PROMPT --> LLM["LLM"]
+    LLM --> RESP["Response"]
+    RESP --> RED
+
+    INT -->|Interview Booking| COL["Collect Missing Fields"]
+    COL --> VAL["Validate + Confirm"]
+    VAL --> BOOK[("PostgreSQL Booking Table")]
+    BOOK --> RESP
+  ```
+
+
 ---
 
 ## 1. Tech stack
@@ -30,7 +63,6 @@ No FAISS, no Chroma, no RetrievalQAChain, no UI.
 | Dependency management | uv | Fast, lockfile-based |
 | Containers | Docker Compose | Reproducible Postgres, Redis, Qdrant |
 
-LangChain is optional. If used, only for loaders or text utilities. The RAG flow itself is written manually.
 
 ---
 
@@ -120,7 +152,7 @@ palm-mind-rag/
 - Docker and Docker Compose (for Postgres, Redis, Qdrant)
 - `uv` package manager (`pip install uv` or see docs.astral.sh/uv)
 - Git
-- An OpenAI API key (or Groq / Gemini key if you switch providers)
+- An OpenAI API key 
 
 ### Python dependencies
 
