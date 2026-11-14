@@ -53,7 +53,7 @@ class Settings:
     chunk_overlap: int = int(os.getenv("CHUNK_OVERLAP", "100"))
     embedding_batch_size: int = int(os.getenv("EMBEDDING_BATCH_SIZE", "32"))
     semantic_breakpoint_percentile: int = int(os.getenv("SEMANTIC_BREAKPOINT_PERCENTILE", "95"))
-
+    llm_timeout_seconds: float = float(os.getenv("LLM_TIMEOUT_SECONDS", "30"))
     # Retrieval
     retrieval_k: int = int(os.getenv("RETRIEVAL_K", "5"))
     retrieval_score_threshold: float = float(os.getenv("RETRIEVAL_SCORE_THRESHOLD", "0.0"))

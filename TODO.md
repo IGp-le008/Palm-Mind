@@ -70,12 +70,12 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [ ] Integration test: multi-turn booking conversation ends with a row in `interview_bookings`
 
 ## Phase 6: Conversational RAG API
-- [ ] `POST /api/v1/chat` accepts `{session_id?, message, document_id?}` and returns `{session_id, reply, sources, booking_status}`
-- [ ] `GET /api/v1/chat/{session_id}/history` returns stored turns (optional but useful for demo)
-- [ ] `DELETE /api/v1/chat/{session_id}` clears Redis memory
-- [ ] `GET /api/v1/bookings` lists bookings (optional, helps the reviewer verify storage)
+- [x] `POST /api/v1/chat` accepts `{session_id?, message, document_id?}` and returns `{session_id, reply, sources, booking_status}`
+- [x] `GET /api/v1/chat/{session_id}/history` returns stored turns (optional but useful for demo)
+- [x] `DELETE /api/v1/chat/{session_id}` clears Redis memory
+- [x] `GET /api/v1/bookings` lists bookings (optional, helps the reviewer verify storage)
 - [ ] Rate limiting or simple request timeout on LLM calls
-- [ ] Integration tests: multi-turn Q&A where the second question depends on the first
+- [x] Integration tests: multi-turn Q&A where the second question depends on the first
 
 ## Phase 7: Quality and hardening
 - [ ] `mypy --strict app` passes with zero errors

@@ -58,7 +58,11 @@ class Container:
         session_factory = create_session_factory(engine)
         redis = Redis.from_url(config.redis_url, decode_responses=True)
         qdrant = AsyncQdrantClient(url=config.qdrant_url, api_key=config.qdrant_api_key or None)
-        openai = AsyncOpenAI(api_key=config.effective_embedding_key, base_url=config.base_url)
+        openai = AsyncOpenAI(
+            api_key=config.effective_embedding_key,
+            base_url=config.base_url,
+            timeout=config.llm_timeout_seconds,
+        )
 
         embedder: EmbeddingProvider = OpenAIEmbeddingProvider(
             openai, config.embedding_model, config.embedding_dim

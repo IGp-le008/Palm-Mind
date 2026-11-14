@@ -10,6 +10,7 @@ from app.container import Container
 from app.core.config import Settings
 from app.services.document_service import DocumentService
 from app.services.ingestion_service import IngestionService
+from app.services.rag_service import RagService
 
 
 def get_container(request: Request) -> Container:
@@ -32,6 +33,11 @@ def get_document_service(container: ContainerDep) -> DocumentService:
     return container.document_service
 
 
+def get_rag_service(container: ContainerDep) -> RagService:
+    return container.rag_service
+
+
 SettingsDep = Annotated[Settings, Depends(get_settings)]
 IngestionDep = Annotated[IngestionService, Depends(get_ingestion_service)]
 DocumentDep = Annotated[DocumentService, Depends(get_document_service)]
+RagDep = Annotated[RagService, Depends(get_rag_service)]

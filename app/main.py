@@ -8,6 +8,7 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from app.api.chat import router as chat_router
 from app.api.documents import router as documents_router
 from app.container import Container
 from app.core.config import settings
@@ -51,6 +52,9 @@ def register_routers(app: FastAPI) -> None:
 
     app.include_router(health_router)
     app.include_router(documents_router)
+
+    app.include_router(documents_router)
+    app.include_router(chat_router)
 
 
 def create_app() -> FastAPI:

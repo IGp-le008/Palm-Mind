@@ -42,6 +42,14 @@ class RagService:
         await self._memory.append_turn(session_id, Turn(user=message, assistant=reply))
         return RagAnswer(session_id=session_id, reply=reply, sources=chunks)
 
+    async def history(self, session_id: str) -> list[Turn]:
+        """Return stored turns for the session, oldest first."""
+        return await self._memory.get_turns(session_id)
+
+    async def clear(self, session_id: str) -> None:
+        """Forget the session's turns. Clearing an unknown session is not an error."""
+        await self._memory.clear(session_id)
+
     async def _standalone_query(self, history: list[Turn], message: str) -> str:
         """Condense only when there is history. A first question is already standalone."""
         if not history:
