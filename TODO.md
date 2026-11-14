@@ -40,10 +40,10 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] `VectorStore` protocol and `QdrantVectorStore` (create collection if missing, upsert, search with optional document filter, delete by document id)
 - [x] `IngestionService` orchestrating validate -> save metadata (pending) -> extract -> chunk -> embed -> upsert -> mark completed or failed
 - [x] Batch embedding (configurable batch size) with retry and backoff on provider errors
-- [ ] `POST /api/v1/documents` endpoint (multipart upload, `chunking_strategy` form field) returning document id and status
-- [ ] `GET /api/v1/documents/{id}` endpoint returning metadata and status
-- [ ] `GET /api/v1/documents` endpoint with pagination
-- [ ] `DELETE /api/v1/documents/{id}` removes SQL row and vector points
+- [x] `POST /api/v1/documents` endpoint (multipart upload, `chunking_strategy` form field) returning document id and status
+- [x] `GET /api/v1/documents/{id}` endpoint returning metadata and status
+- [x] `GET /api/v1/documents` endpoint with pagination
+- [x] `DELETE /api/v1/documents/{id}` removes SQL row and vector points
 - [ ] Integration tests for upload of a txt and a pdf, for both strategies, and for invalid input
 
 ## Phase 4: Custom RAG pipeline
