@@ -31,7 +31,7 @@ class Settings:
     base_url: str = os.getenv("BASE_URL", "https://openrouter.ai/api/v1")
     chat_model: str = os.getenv("CHAT_MODEL", "nvidia/nemotron-3.5-lightning:free")
     embedding_model: str = os.getenv("EMBEDDING_MODEL", "nvidia/nemotron-3.5-embed-1b:free")
-    embedding_dim: int = int(os.getenv("EMBEDDING_DIM", "0"))
+    embedding_dim: int = int(os.getenv("EMBEDDING_DIM", "2048"))
     temperature: float = float(os.getenv("TEMPERATURE", "0.4"))
 
     # PostgreSQL
