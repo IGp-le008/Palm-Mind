@@ -77,12 +77,12 @@ class DocumentRepository:
         )
         result = await self._session.execute(statement)
         return result.scalars().all()
-    
-        async def delete(self, document_id: uuid.UUID) -> bool:
-            """Delete the document row. Returns False if it does not exist."""
-            document = await self.get_by_id(document_id)
-            if document is None:
-                return False
-            await self._session.delete(document)
-            await self._session.flush()
-            return True
+
+    async def delete(self, document_id: uuid.UUID) -> bool:
+        """Delete the document row. Returns False if it does not exist."""
+        document = await self.get_by_id(document_id)
+        if document is None:
+            return False
+        await self._session.delete(document)
+        await self._session.flush()
+        return True
