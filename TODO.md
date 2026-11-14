@@ -88,11 +88,11 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] Input size limits and request validation on every endpoint
 
 ## Phase 8: Documentation and submission
-- [ ] README: overview, architecture diagram, setup, env vars, run, test
-- [ ] README: example `curl` for every endpoint with sample responses
-- [ ] `docs/DECISIONS.md`: chunking strategy trade-offs, why Qdrant, why Redis memory design, booking design
-- [ ] Postman collection or `scripts/demo.http` covering the full flow
-- [ ] Record a short screen demo (optional, check requirements)
-- [ ] Fresh-clone test: follow README from scratch on a clean machine or folder
-- [ ] Final review of AGENTS.md compliance
-- [ ] Submit to Palm Mind AI before the deadline
+- [x] README: overview, architecture diagram, setup, env vars, run, test
+- [x] README: example `curl` for every endpoint with sample responses
+- [x] `docs/DECISIONS.md`: chunking strategy trade-offs, why Qdrant, why Redis memory design, booking design
+- [x] Postman collection or `scripts/demo.http` covering the full flow
+- [x] Record a short screen demo (optional, check requirements)
+- [x] Fresh-clone test: follow README from scratch on a clean machine or folder
+- [x] Final review of AGENTS.md compliance
+- [x] Submit to Palm Mind AI before the deadline

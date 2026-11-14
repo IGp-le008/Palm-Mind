@@ -20,7 +20,7 @@ uploads/
 .vscode/
 *.code-workspace
 
-TODO.md 
+TODO.md
 
 .agents
 .aws
