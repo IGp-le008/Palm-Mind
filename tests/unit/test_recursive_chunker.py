@@ -8,8 +8,7 @@ from app.chunking.base import ChunkingStrategy
 from app.chunking.recursive import RecursiveChunker
 
 PARAGRAPHS = [
-    f"Paragraph {i} contains some filler words that keep going for a while here."
-    for i in range(20)
+    f"Paragraph {i} contains some filler words that keep going for a while here." for i in range(20)
 ]
 TEXT = "\n\n".join(PARAGRAPHS)
 

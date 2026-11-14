@@ -60,13 +60,9 @@ class Document(Base):
     sha256: Mapped[str] = mapped_column(String(64))
     strategy: Mapped[str] = mapped_column(String(20))
     chunk_count: Mapped[int] = mapped_column(Integer, default=0)
-    status: Mapped[str] = mapped_column(
-        String(20), default=DocumentStatus.PENDING.value
-    )
+    status: Mapped[str] = mapped_column(String(20), default=DocumentStatus.PENDING.value)
     error: Mapped[str | None] = mapped_column(Text, default=None)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -76,9 +72,7 @@ class InterviewBooking(Base):
     """A confirmed interview slot created through the chat booking flow."""
 
     __tablename__ = "interview_bookings"
-    __table_args__ = (
-        UniqueConstraint("email", "date", "time", name="uq_interview_booking_slot"),
-    )
+    __table_args__ = (UniqueConstraint("email", "date", "time", name="uq_interview_booking_slot"),)
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     session_id: Mapped[str] = mapped_column(String(64), index=True)
@@ -86,9 +80,5 @@ class InterviewBooking(Base):
     email: Mapped[str] = mapped_column(String(254))
     date: Mapped[dt_date] = mapped_column(Date)
     time: Mapped[dt_time] = mapped_column(Time)
-    status: Mapped[str] = mapped_column(
-        String(20), default=BookingStatus.CONFIRMED.value
-    )
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    status: Mapped[str] = mapped_column(String(20), default=BookingStatus.CONFIRMED.value)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

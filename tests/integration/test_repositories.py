@@ -39,9 +39,7 @@ async def test_update_status_sets_status_and_chunk_count(session: AsyncSession) 
     repo = DocumentRepository(session)
     document = await make_document(repo)
 
-    updated = await repo.update_status(
-        document.id, DocumentStatus.COMPLETED.value, chunk_count=7
-    )
+    updated = await repo.update_status(document.id, DocumentStatus.COMPLETED.value, chunk_count=7)
 
     assert updated is not None
     assert updated.status == DocumentStatus.COMPLETED.value
@@ -73,9 +71,7 @@ async def test_booking_exists_after_create(session: AsyncSession) -> None:
     )
 
     assert await repo.exists(email="ana@example.com", date=date(2030, 1, 10), time=time(10, 0))
-    assert not await repo.exists(
-        email="ana@example.com", date=date(2030, 1, 10), time=time(11, 0)
-    )
+    assert not await repo.exists(email="ana@example.com", date=date(2030, 1, 10), time=time(11, 0))
 
 
 async def test_duplicate_slot_raises_integrity_error(session: AsyncSession) -> None:

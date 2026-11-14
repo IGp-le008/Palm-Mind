@@ -20,5 +20,3 @@ def require_text(text: str, empty_message: str) -> str:
     if not text.strip():
         raise IngestionFailed(empty_message)
     return text
-
-
