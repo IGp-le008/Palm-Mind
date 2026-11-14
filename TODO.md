@@ -44,7 +44,7 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] `GET /api/v1/documents/{id}` endpoint returning metadata and status
 - [x] `GET /api/v1/documents` endpoint with pagination
 - [x] `DELETE /api/v1/documents/{id}` removes SQL row and vector points
-- [ ] Integration tests for upload of a txt and a pdf, for both strategies, and for invalid input
+- [x] Integration tests for upload of a txt and a pdf, for both strategies, and for invalid input
 
 ## Phase 4: Custom RAG pipeline
 - [ ] `ChatModel` protocol and implementation (`Nvidia` `nvidia/nemotron-3.5-lightning:free` or OpenAI / Groq / Gemini equivalent)
