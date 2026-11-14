@@ -79,3 +79,4 @@ warn_required_dynamic_aliases = true
 asyncio_mode = "auto"
 testpaths = ["tests"]
 addopts = "-ra --strict-markers --cov=app --cov-report=term-missing"
+docker compose exec postgres psql -U app -d ragdb -c "CREATE DATABASE ragdb_test;"
