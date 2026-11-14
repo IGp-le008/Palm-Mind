@@ -28,7 +28,7 @@ class Container:
     settings: Settings
     engine: AsyncEngine
     session_factory: async_sessionmaker[AsyncSession]
-    redis: Redis[str]
+    redis: Redis
 
     @classmethod
     def create(cls, config: Settings) -> Container:
