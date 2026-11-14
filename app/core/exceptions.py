@@ -61,3 +61,9 @@ class ProviderError(AppError):
 
     status_code: ClassVar[int] = 502
     error_code: ClassVar[str] = "provider_error"
+
+class DocumentNotFound(AppError):
+    """No document exists with the requested id."""
+
+    status_code: ClassVar[int] = 404
+    error_code: ClassVar[str] = "document_not_found"
