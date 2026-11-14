@@ -37,7 +37,7 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] `RecursiveChunker` (paragraph, sentence, then character fallback) with unit tests
 - [x] Chunker factory that maps the request value to an implementation
 - [x] `EmbeddingProvider` protocol and first implementation (OpenAI `nvidia/nemotron-3.5-embed-1b:free` or local `sentence-transformers`)
-- [ ] `VectorStore` protocol and `QdrantVectorStore` (create collection if missing, upsert, search with optional document filter, delete by document id)
+- [x] `VectorStore` protocol and `QdrantVectorStore` (create collection if missing, upsert, search with optional document filter, delete by document id)
 - [ ] `IngestionService` orchestrating validate -> save metadata (pending) -> extract -> chunk -> embed -> upsert -> mark completed or failed
 - [ ] Batch embedding (configurable batch size) with retry and backoff on provider errors
 - [ ] `POST /api/v1/documents` endpoint (multipart upload, `chunking_strategy` form field) returning document id and status
