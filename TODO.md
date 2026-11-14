@@ -34,7 +34,7 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] File validation: extension, MIME, magic bytes, size limit
 - [x] `ChunkingStrategy` protocol and `Chunk` dataclass
 - [ ] `SemanticChunker` (size and overlap configurable) with unit tests
-- [ ] `RecursiveChunker` (paragraph, sentence, then character fallback) with unit tests
+- [x] `RecursiveChunker` (paragraph, sentence, then character fallback) with unit tests
 - [ ] Chunker factory that maps the request value to an implementation
 - [ ] `EmbeddingProvider` protocol and first implementation (OpenAI `nvidia/nemotron-3.5-embed-1b:free` or local `sentence-transformers`)
 - [ ] `VectorStore` protocol and `QdrantVectorStore` (create collection if missing, upsert, search with optional document filter, delete by document id)
