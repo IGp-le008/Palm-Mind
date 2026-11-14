@@ -11,17 +11,23 @@ from fastapi.responses import JSONResponse
 from app.core.config import settings
 from app.core.exceptions import AppError
 from app.core.logging import get_logger, setup_logging
+from app.container import Container
+
+from app.api.documents import router as documents_router
 
 logger = get_logger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    """Validate required configuration once at startup, before serving requests."""
-    settings.validate_for_storage()
+async def lifespan(app: FastAPI) -> AsyncIterator[dict[str, Container]]:
+    """Build shared clients at startup, expose them to requests, and release them on shutdown."""
+    container = Container.create(settings)
     logger.info("Application started (env=%s)", settings.app_env)
-    yield
-    logger.info("Application stopped")
+    try:
+        yield {"container": container}
+    finally:
+        await container.close()
+        logger.info("Application stopped")
 
 
 def register_exception_handlers(app: FastAPI) -> None:
@@ -45,6 +51,7 @@ def register_routers(app: FastAPI) -> None:
         return {"status": "ok"}
 
     app.include_router(health_router)
+    app.include_router(documents_router)
 
 
 def create_app() -> FastAPI:
