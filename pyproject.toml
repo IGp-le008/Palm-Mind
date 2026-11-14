@@ -55,7 +55,7 @@ select = [
 [tool.mypy]
 python_version = "3.11"
 strict = true
-plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
+plugins = ["pydantic.mypy"]
 files = ["app", "tests"]
 warn_unreachable = true
 warn_unused_ignores = true
