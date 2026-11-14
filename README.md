@@ -83,6 +83,7 @@ No FAISS, no Chroma, no RetrievalQAChain, no UI.
 ```
 palm-mind-rag/
 ├── app/
+│   │── container.py           # Dependency wiring
 │   ├── main.py                    # FastAPI app factory, routers, exception handlers
 │   ├── api/
 │   │   ├── deps.py                # FastAPI dependencies (services, sessions)
@@ -91,7 +92,6 @@ palm-mind-rag/
 │   │   └── bookings.py            # /api/v1/bookings routes
 │   ├── core/
 │   │   ├── config.py            # Settings (pydantic-settings)
-│   │   ├── container.py           # Dependency wiring
 │   │   ├── exceptions.py          # Domain exceptions + HTTP mapping
 │   │   └── logging.py
 │   ├── schemas/
