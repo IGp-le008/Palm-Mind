@@ -78,14 +78,14 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] Integration tests: multi-turn Q&A where the second question depends on the first
 
 ## Phase 7: Quality and hardening
-- [ ] `mypy --strict app` passes with zero errors
-- [ ] `ruff check` and `ruff format --check` pass
-- [ ] Test coverage >= 80% on `app/services` and `app/chunking`
-- [ ] Remove any leftover TODOs, prints, or dead code
-- [ ] Verify no forbidden libraries: `grep -RniE "faiss|chroma|RetrievalQA" .` returns nothing
-- [ ] Verify no UI code: no templates, no Streamlit, no static frontend
-- [ ] Secrets only via env; `.env` is git-ignored
-- [ ] Input size limits and request validation on every endpoint
+- [x] `mypy --strict app` passes with zero errors
+- [x] `ruff check` and `ruff format --check` pass
+- [x] Test coverage >= 80% on `app/services` and `app/chunking`
+- [x] Remove any leftover TODOs, prints, or dead code
+- [x] Verify no forbidden libraries: `grep -RniE "faiss|chroma|RetrievalQA" .` returns nothing
+- [x] Verify no UI code: no templates, no Streamlit, no static frontend
+- [x] Secrets only via env; `.env` is git-ignored
+- [x] Input size limits and request validation on every endpoint
 
 ## Phase 8: Documentation and submission
 - [ ] README: overview, architecture diagram, setup, env vars, run, test
