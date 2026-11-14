@@ -18,7 +18,7 @@ SessionPath = Annotated[str, Path(description="Session id returned by POST /api/
 
 @router.post("", response_model=ChatResponse)
 async def chat(request: ChatRequest, rag: RagDep) -> ChatResponse:
-    """Answer a message using the conversation so far and the uploaded documents."""
+    """Answer a message, or continue the interview booking when one is in progress."""
     session_id = resolve_session_id(request.session_id)
     answer = await rag.answer(session_id, request.message, request.document_id)
     return ChatResponse(
@@ -28,6 +28,7 @@ async def chat(request: ChatRequest, rag: RagDep) -> ChatResponse:
             SourceRef(document_id=chunk.document_id, chunk_index=chunk.chunk_index)
             for chunk in answer.sources
         ],
+        booking_status=answer.booking_status,
     )
 
 

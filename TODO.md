@@ -58,16 +58,16 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] Return sources (document id, chunk index) in the response
 
 ## Phase 5: Interview booking
-- [ ] Booking tool schema (name, email, date, time, plus `intent` and `is_confirmed`) defined as a Pydantic model
-- [ ] LLM extraction call that returns structured JSON (function calling or JSON mode) with validation and one retry on failure
-- [ ] Booking state stored in Redis per session, merged across turns
-- [ ] Validation rules: name non-empty, email format, date >= today, time within business hours
-- [ ] Missing-field prompting: ask only for what is missing, one or two fields at a time
-- [ ] Confirmation step: summarise the booking and wait for explicit yes/no
-- [ ] `BookingService.save` writes to SQL only after confirmation; handles duplicate slot with a clear message
-- [ ] Routing in `RagService`: if booking intent is active, go to booking flow, otherwise RAG flow
-- [ ] Unit tests for validation and state merge
-- [ ] Integration test: multi-turn booking conversation ends with a row in `interview_bookings`
+- [x] Booking tool schema (name, email, date, time, plus `intent` and `is_confirmed`) defined as a Pydantic model
+- [x] LLM extraction call that returns structured JSON (function calling or JSON mode) with validation and one retry on failure
+- [x] Booking state stored in Redis per session, merged across turns
+- [x] Validation rules: name non-empty, email format, date >= today, time within business hours
+- [x] Missing-field prompting: ask only for what is missing, one or two fields at a time
+- [x] Confirmation step: summarise the booking and wait for explicit yes/no
+- [x] `BookingService.save` writes to SQL only after confirmation; handles duplicate slot with a clear message
+- [x] Routing in `RagService`: if booking intent is active, go to booking flow, otherwise RAG flow
+- [x] Unit tests for validation and state merge
+- [x] Integration test: multi-turn booking conversation ends with a row in `interview_bookings`
 
 ## Phase 6: Conversational RAG API
 - [x] `POST /api/v1/chat` accepts `{session_id?, message, document_id?}` and returns `{session_id, reply, sources, booking_status}`

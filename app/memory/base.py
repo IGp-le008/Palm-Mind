@@ -1,9 +1,11 @@
-"""Chat memory protocol and the Turn value type."""
+"""Memory protocols and the value types they store."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Protocol
+
+from app.schemas.booking import BookingDraft
 
 
 @dataclass(frozen=True, slots=True)
@@ -27,4 +29,20 @@ class ChatMemory(Protocol):
 
     async def clear(self, session_id: str) -> None:
         """Remove all turns for the session."""
+        ...
+
+
+class BookingStateStore(Protocol):
+    """Holds the partial booking for a session between turns."""
+
+    async def get(self, session_id: str) -> BookingDraft | None:
+        """Return the draft, or None if no booking is in progress."""
+        ...
+
+    async def save(self, session_id: str, draft: BookingDraft) -> None:
+        """Store the draft, refreshing its expiry."""
+        ...
+
+    async def clear(self, session_id: str) -> None:
+        """Remove the draft."""
         ...

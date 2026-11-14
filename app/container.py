@@ -6,6 +6,7 @@ This is the composition root: it sits at the top of app/ and may import from eve
 
 from __future__ import annotations
 
+import datetime as dt
 from dataclasses import dataclass
 
 from openai import AsyncOpenAI
@@ -22,7 +23,10 @@ from app.llm.base import ChatModel, EmbeddingProvider
 from app.llm.openai_chat import OpenAIChatModel
 from app.llm.openai_embeddings import OpenAIEmbeddingProvider
 from app.memory.base import ChatMemory
+from app.memory.redis_booking_state import RedisBookingState
 from app.memory.redis_memory import RedisChatMemory
+from app.services.booking_extractor import BookingExtractor
+from app.services.booking_service import BookingService
 from app.services.document_service import DocumentService
 from app.services.file_validator import FileKind
 from app.services.ingestion_service import IngestionService
@@ -45,6 +49,7 @@ class Container:
     vector_store: VectorStore
     ingestion_service: IngestionService
     document_service: DocumentService
+    booking_service: BookingService
     rag_service: RagService
 
     @classmethod
@@ -81,6 +86,15 @@ class Container:
             score_threshold=config.retrieval_score_threshold,
         )
 
+        hours = (config.business_hours_start, config.business_hours_end)
+        booking_service = BookingService(
+            session_factory=session_factory,
+            extractor=BookingExtractor(chat_model, hours=hours),
+            state=RedisBookingState(redis, ttl_seconds=config.chat_ttl_seconds),
+            clock=dt.date.today,
+            hours=hours,
+        )
+
         ingestion_service = IngestionService(
             session_factory=session_factory,
             extractors={FileKind.PDF: PdfExtractor(), FileKind.TXT: TxtExtractor()},
@@ -91,7 +105,12 @@ class Container:
             embedding_batch_size=config.embedding_batch_size,
         )
         document_service = DocumentService(session_factory, vector_store)
-        rag_service = RagService(chat=chat_model, memory=memory, retriever=retriever)
+        rag_service = RagService(
+            chat=chat_model,
+            memory=memory,
+            retriever=retriever,
+            booking=booking_service,
+        )
 
         return cls(
             settings=config,
@@ -103,6 +122,7 @@ class Container:
             vector_store=vector_store,
             ingestion_service=ingestion_service,
             document_service=document_service,
+            booking_service=booking_service,
             rag_service=rag_service,
         )
 

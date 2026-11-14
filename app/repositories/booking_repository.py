@@ -58,6 +58,17 @@ class BookingRepository:
         result = await self._session.execute(statement)
         return result.scalar_one_or_none() is not None
 
+    async def list(self, *, limit: int = 20, offset: int = 0) -> Sequence[InterviewBooking]:
+        """Return bookings newest first, one page at a time."""
+        statement = (
+            select(InterviewBooking)
+            .order_by(InterviewBooking.created_at.desc(), InterviewBooking.id)
+            .limit(limit)
+            .offset(offset)
+        )
+        result = await self._session.execute(statement)
+        return result.scalars().all()
+
     async def list_by_session(self, session_id: str) -> Sequence[InterviewBooking]:
         """Return all bookings made in a chat session, in date and time order."""
         statement = (
