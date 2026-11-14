@@ -18,7 +18,6 @@ from qdrant_client.http.models import (
     VectorParams,
 )
 
-from app.core.config import Settings
 from app.core.exceptions import ProviderError
 from app.core.logging import get_logger
 from app.vectorstore.base import ChunkPayload, ChunkRecord, SearchHit
@@ -37,12 +36,6 @@ class QdrantVectorStore:
         self._client = client
         self._collection = collection
         self._dimension = dimension
-
-    @classmethod
-    def from_settings(cls, config: Settings) -> QdrantVectorStore:
-        """Build the store from environment-backed settings."""
-        client = AsyncQdrantClient(url=config.qdrant_url, api_key=config.qdrant_api_key or None)
-        return cls(client, config.collection_name, config.embedding_dim)
 
     async def ensure_collection(self) -> None:
         try:

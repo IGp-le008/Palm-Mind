@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from openai import AsyncOpenAI, OpenAIError
 
-from app.core.config import Settings
 from app.core.exceptions import ProviderError
 from app.core.logging import get_logger
 
