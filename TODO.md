@@ -32,7 +32,7 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] Text extraction for `.txt` (UTF-8 with fallback encoding detection)
 - [x] Text extraction for `.pdf` (pypdf; handle empty or scanned PDFs with a clear error)
 - [x] File validation: extension, MIME, magic bytes, size limit
-- [ ] `ChunkingStrategy` protocol and `Chunk` dataclass
+- [x] `ChunkingStrategy` protocol and `Chunk` dataclass
 - [ ] `SemanticChunker` (size and overlap configurable) with unit tests
 - [ ] `RecursiveChunker` (paragraph, sentence, then character fallback) with unit tests
 - [ ] Chunker factory that maps the request value to an implementation
