@@ -83,67 +83,100 @@ No FAISS, no Chroma, no RetrievalQAChain, no UI.
 ```
 palm-mind-rag/
 ├── app/
-│   │── container.py           # Dependency wiring
-│   ├── main.py                    # FastAPI app factory, routers, exception handlers
+│   ├── __init__.py
+│   ├── container.py                # Dependency wiring
+│   ├── main.py                     # FastAPI app factory and router registration
 │   ├── api/
-│   │   ├── deps.py                # FastAPI dependencies (services, sessions)
-│   │   ├── documents.py           # /api/v1/documents routes
-│   │   ├── chat.py                # /api/v1/chat routes
-│   │   └── bookings.py            # /api/v1/bookings routes
+│   │   ├── __init__.py
+│   │   ├── deps.py                 # FastAPI dependencies
+│   │   ├── documents.py            # Document routes
+│   │   ├── chat.py                 # Chat routes
+│   │   └── bookings.py             # Booking routes
 │   ├── core/
-│   │   ├── config.py            # Settings (pydantic-settings)
-│   │   ├── exceptions.py          # Domain exceptions + HTTP mapping
-│   │   └── logging.py
+│   │   ├── __init__.py
+│   │   ├── config.py               # Settings (pydantic-settings)
+│   │   ├── exceptions.py           # Domain exceptions
+│   │   └── logging.py              # Logging setup
 │   ├── schemas/
-│   │   ├── documents.py           # Upload/response DTOs
-│   │   ├── chat.py                # Chat request/response DTOs
-│   │   └── booking.py             # Booking DTOs and validation
+│   │   ├── booking.py              # Booking DTOs and validation
+│   │   ├── chat.py                 # Chat request/response DTOs
+│   │   └── documents.py            # Upload/response DTOs
 │   ├── services/
-│   │   ├── ingestion_service.py   # Orchestrates the ingestion pipeline
-│   │   ├── rag_service.py         # Custom RAG: condense, retrieve, prompt, generate
-│   │   ├── retriever.py           # Embed query + vector search
-│   │   ├── prompt_builder.py      # System, history, context prompts
-│   │   ├── booking_service.py     # Booking state, validation, persistence
-│   │   └── chat_session.py        # Session id handling
+│   │   ├── booking_extractor.py   # LLM booking extraction
+│   │   ├── booking_service.py      # Booking state, validation, persistence
+│   │   ├── chat_session.py          # Session id handling
+│   │   ├── document_service.py     # Document metadata operations
+│   │   ├── file_validator.py       # Upload validation
+│   │   ├── ingestion_service.py    # Document ingestion pipeline
+│   │   ├── prompt_builder.py        # System, history, context prompts
+│   │   ├── rag_service.py           # Custom RAG orchestration
+│   │   └── retriever.py             # Query embedding and vector search
 │   ├── repositories/
-│   │   ├── document_repository.py
-│   │   └── booking_repository.py
+│   │   ├── __init__.py
+│   │   ├── booking_repository.py    # Booking SQL access
+│   │   └── document_repository.py   # Document SQL access
 │   ├── vectorstore/
-│   │   ├── base.py                # VectorStore Protocol
-│   │   └── qdrant_store.py        # QdrantVectorStore
+│   │   ├── base.py                  # VectorStore protocol and types
+│   │   └── qdrant_store.py          # Qdrant implementation
 │   ├── llm/
-│   │   ├── base.py                # EmbeddingProvider, ChatModel Protocols
-│   │   ├── openai_embeddings.py
-│   │   └── openai_chat.py
+│   │   ├── base.py                  # EmbeddingProvider and ChatModel protocols
+│   │   ├── openai_chat.py            # OpenAI-compatible chat provider
+│   │   └── openai_embeddings.py       # OpenAI-compatible embedding provider
 │   ├── memory/
-│   │   ├── base.py                # ChatMemory Protocol
-│   │   └── redis_memory.py        # RedisChatMemory
+│   │   ├── base.py                  # Chat memory protocol and types
+│   │   ├── redis_booking_state.py   # Redis booking state
+│   │   └── redis_memory.py           # Redis chat memory
 │   ├── chunking/
-│   │   ├── base.py                # ChunkingStrategy Protocol, Chunk dataclass
-│   │   ├── semantic.py            # Strategy 1: semantic aware chunking
-│   │   ├── recursive.py           # Strategy 2: paragraph/sentence-aware
-│   │   └── factory.py
+│   │   ├── __init__.py
+│   │   ├── base.py                  # Chunking protocol and Chunk dataclass
+│   │   ├── factory.py               # Chunker factory
+│   │   ├── recursive.py             # Paragraph/sentence-aware chunking
+│   │   └── semantic.py              # Semantic-aware chunking
 │   ├── extraction/
-│   │   ├── pdf_extractor.py
-│   │   └── txt_extractor.py
+│   │   ├── __init__.py
+│   │   ├── base.py                  # Text extraction protocol
+│   │   ├── pdf_extractor.py         # PDF extraction
+│   │   └── txt_extractor.py         # TXT extraction
 │   └── db/
-│       ├── base.py                # DeclarativeBase
-│       ├── models.py              # Document, InterviewBooking
-│       └── session.py             # Engine and session factory
-├── migrations/                    # Alembic
+│       ├── __init__.py
+│       ├── base.py                  # SQLAlchemy declarative base
+│       ├── models.py                # Document and InterviewBooking models
+│       └── session.py               # Engine and session factory
+├── migrations/
+│   ├── env.py                       # Alembic environment
+│   ├── script.py.mako               # Migration template
+│   ├── README
+│   └── versions/
+│       ├── 2e3b86820ac5_create_documents_and_interview_bookings.py
+│       └── 325ecfe94160_create_documents_and_interview_bookings.py
 ├── tests/
+│   ├── conftest.py
 │   ├── unit/
-│   │   ├── test_chunking.py
-│   │   ├── test_prompt_builder.py
+│   │   ├── test_booking_extractor.py
 │   │   ├── test_booking_validation.py
-│   │   └── test_memory.py
+│   │   ├── test_chunker_factory.py
+│   │   ├── test_chunking.py
+│   │   ├── test_chunking_base.py
+│   │   ├── test_embedding_provider.py
+│   │   ├── test_extraction.py
+│   │   ├── test_file_validator.py
+│   │   ├── test_ingestion_service.py
+│   │   ├── test_memory.py
+│   │   ├── test_prompt_builder.py
+│   │   ├── test_recursive_chunker.py
+│   │   ├── test_semantic_chunker.py
+│   │   └── test_vectorstore_base.py
 │   └── integration/
+│       ├── test_bookings_api.py
+│       ├── test_chat_api.py
 │       ├── test_documents_api.py
-│       └── test_chat_api.py
+│       └── test_repositories.py
 ├── scripts/
-│   └── demo.http                  # Sample requests for the full flow
+│   └── demo.http                    # Sample requests for the full flow
 ├── docs/
-│   └── DECISIONS.md               # Design decisions and trade-offs
+│   └── DECISIONS.md                # Design decisions and trade-offs
+├── sample.txt
+├── sample5.pdf
 ├── AGENTS.md
 ├── README.md
 ├── docker-compose.yml
@@ -151,7 +184,8 @@ palm-mind-rag/
 ├── .gitignore
 ├── pyproject.toml
 ├── ruff.toml
-└── alembic.ini
+├── alembic.ini
+└── uv.lock
 ```
 
 ---
