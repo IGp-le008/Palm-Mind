@@ -1,6 +1,7 @@
 """Dependency wiring.
 
 Builds shared clients and services once at startup and closes the clients on shutdown.
+This is the composition root: it sits at the top of app/ and may import from every layer.
 """
 
 from __future__ import annotations
@@ -17,11 +18,16 @@ from app.core.config import Settings
 from app.db.session import create_db_engine, create_session_factory
 from app.extraction.pdf_extractor import PdfExtractor
 from app.extraction.txt_extractor import TxtExtractor
-from app.llm.base import EmbeddingProvider
+from app.llm.base import ChatModel, EmbeddingProvider
+from app.llm.openai_chat import OpenAIChatModel
 from app.llm.openai_embeddings import OpenAIEmbeddingProvider
+from app.memory.base import ChatMemory
+from app.memory.redis_memory import RedisChatMemory
 from app.services.document_service import DocumentService
 from app.services.file_validator import FileKind
 from app.services.ingestion_service import IngestionService
+from app.services.rag_service import RagService
+from app.services.retriever import Retriever
 from app.vectorstore.base import VectorStore
 from app.vectorstore.qdrant_store import QdrantVectorStore
 
@@ -33,18 +39,20 @@ class Container:
     settings: Settings
     engine: AsyncEngine
     session_factory: async_sessionmaker[AsyncSession]
-    redis: Redis[str]
+    redis: Redis
     qdrant: AsyncQdrantClient
     openai: AsyncOpenAI
     vector_store: VectorStore
     ingestion_service: IngestionService
     document_service: DocumentService
+    rag_service: RagService
 
     @classmethod
     def create(cls, config: Settings) -> Container:
         """Validate configuration and construct all clients. Does not open connections yet."""
         config.validate_for_storage()
         config.validate_for_embeddings()
+        config.validate_for_chat()
 
         engine = create_db_engine(config.database_url)
         session_factory = create_session_factory(engine)
@@ -55,7 +63,20 @@ class Container:
         embedder: EmbeddingProvider = OpenAIEmbeddingProvider(
             openai, config.embedding_model, config.embedding_dim
         )
+        chat_model: ChatModel = OpenAIChatModel(openai, config.chat_model, config.temperature)
         vector_store = QdrantVectorStore(qdrant, config.collection_name, config.embedding_dim)
+        memory: ChatMemory = RedisChatMemory(
+            redis,
+            max_turns=config.chat_history_turns,
+            ttl_seconds=config.chat_ttl_seconds,
+        )
+        retriever = Retriever(
+            embedder,
+            vector_store,
+            top_k=config.retrieval_k,
+            score_threshold=config.retrieval_score_threshold,
+        )
+
         ingestion_service = IngestionService(
             session_factory=session_factory,
             extractors={FileKind.PDF: PdfExtractor(), FileKind.TXT: TxtExtractor()},
@@ -66,6 +87,7 @@ class Container:
             embedding_batch_size=config.embedding_batch_size,
         )
         document_service = DocumentService(session_factory, vector_store)
+        rag_service = RagService(chat=chat_model, memory=memory, retriever=retriever)
 
         return cls(
             settings=config,
@@ -77,6 +99,7 @@ class Container:
             vector_store=vector_store,
             ingestion_service=ingestion_service,
             document_service=document_service,
+            rag_service=rag_service,
         )
 
     async def close(self) -> None:

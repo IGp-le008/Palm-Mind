@@ -47,15 +47,15 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 - [x] Integration tests for upload of a txt and a pdf, for both strategies, and for invalid input
 
 ## Phase 4: Custom RAG pipeline
-- [ ] `ChatModel` protocol and implementation (`Nvidia` `nvidia/nemotron-3.5-lightning:free` or OpenAI / Groq / Gemini equivalent)
-- [ ] `ChatMemory` protocol and `RedisChatMemory` (append turn, get last N turns, TTL refresh, clear)
-- [ ] Session id generation and validation
-- [ ] Query condensation prompt: rewrite follow-up question into a standalone query using history
-- [ ] Retriever service: embed query, search, optional `document_id` filter, score threshold
-- [ ] Prompt builder: system prompt, history block, context block with source markers, user question
-- [ ] `RagService.answer(session_id, message, document_id?)` tying the steps together
-- [ ] Unit tests for prompt builder and condensation logic with a fake ChatModel
-- [ ] Return sources (document id, chunk index) in the response
+- [x] `ChatModel` protocol and implementation (`Nvidia` `nvidia/nemotron-3.5-lightning:free` or OpenAI / Groq / Gemini equivalent)
+- [x] `ChatMemory` protocol and `RedisChatMemory` (append turn, get last N turns, TTL refresh, clear)
+- [x] Session id generation and validation
+- [x] Query condensation prompt: rewrite follow-up question into a standalone query using history
+- [x] Retriever service: embed query, search, optional `document_id` filter, score threshold
+- [x] Prompt builder: system prompt, history block, context block with source markers, user question
+- [x] `RagService.answer(session_id, message, document_id?)` tying the steps together
+- [x] Unit tests for prompt builder and condensation logic with a fake ChatModel
+- [x] Return sources (document id, chunk index) in the response
 
 ## Phase 5: Interview booking
 - [ ] Booking tool schema (name, email, date, time, plus `intent` and `is_confirmed`) defined as a Pydantic model

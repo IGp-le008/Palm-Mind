@@ -8,12 +8,12 @@ faked, so no paid API is called. Requires `docker compose up -d` and
 from __future__ import annotations
 
 import uuid
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 from dataclasses import dataclass, field
 
 import httpx
 import pytest
-from starlette.types import Receive, Scope, Send
+from starlette.types import ASGIApp, Receive, Scope, Send
 
 from app.core.config import settings
 from app.main import app as fastapi_app
@@ -42,14 +42,14 @@ class FakeEmbeddingProvider:
 class _LifespanStateInjector:
     """Passes lifespan state to requests. httpx's ASGI transport does not do this itself."""
 
-    def __init__(self, app: object, state: dict[str, object]) -> None:
+    def __init__(self, app: ASGIApp, state: Mapping[str, object] | None) -> None:
         self._app = app
-        self._state = state
+        self._state = dict(state or {})
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] == "http":
             scope.setdefault("state", {}).update(self._state)
-        await self._app(scope, receive, send)  # type: ignore[operator]
+        await self._app(scope, receive, send)
 
 
 @dataclass

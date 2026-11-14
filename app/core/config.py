@@ -56,6 +56,7 @@ class Settings:
 
     # Retrieval
     retrieval_k: int = int(os.getenv("RETRIEVAL_K", "5"))
+    retrieval_score_threshold: float = float(os.getenv("RETRIEVAL_SCORE_THRESHOLD", "0.0"))
 
     # Interview booking
     business_hours_start: time = _time(os.getenv("BUSINESS_HOURS_START", "09:00"))

@@ -62,8 +62,16 @@ class ProviderError(AppError):
     status_code: ClassVar[int] = 502
     error_code: ClassVar[str] = "provider_error"
 
+
 class DocumentNotFound(AppError):
     """No document exists with the requested id."""
 
     status_code: ClassVar[int] = 404
     error_code: ClassVar[str] = "document_not_found"
+
+
+class InvalidSessionId(AppError):
+    """The supplied session id is not a valid UUID."""
+
+    status_code: ClassVar[int] = 422
+    error_code: ClassVar[str] = "invalid_session_id"

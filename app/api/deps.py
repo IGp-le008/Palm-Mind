@@ -6,8 +6,8 @@ from typing import Annotated, cast
 
 from fastapi import Depends, Request
 
-from app.core.config import Settings
 from app.container import Container
+from app.core.config import Settings
 from app.services.document_service import DocumentService
 from app.services.ingestion_service import IngestionService
 

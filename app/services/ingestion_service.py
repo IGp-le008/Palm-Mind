@@ -49,6 +49,7 @@ class IngestionService:
     so a failure leaves the `failed` status and error message visible to later reads.
     Files rejected by validation never create a document row.
     """
+
     def __init__(
         self,
         *,

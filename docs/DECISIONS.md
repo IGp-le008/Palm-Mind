@@ -28,3 +28,7 @@ Ingestion runs synchronously within the upload request, so the response is compl
 Delete removes vectors before the row, so a Qdrant failure can be retried.
 A crash between the Qdrant write and the final status commit leaves a document in processing with its points present. A delete cleans both up.
 The container sits in app/core and imports services. Moving it up a layer is possible later.
+
+
+## Trade-offs from phase 4
+condensation runs only when history exists, memory is last-write-wins per session, and chat calls have no retry yet.

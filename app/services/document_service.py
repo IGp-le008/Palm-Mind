@@ -38,7 +38,7 @@ class DocumentService:
             return await DocumentRepository(session).list(limit=limit, offset=offset)
 
     async def delete(self, document_id: uuid.UUID) -> None:
-        """Delete vectors first, then the row. If Qdrant fails, the row remains and a retry works."""
+        """Delete vectors first, then the row, so a failed vector delete can be retried."""
         await self.get(document_id)
         await self._vector_store.delete_document(document_id)
         async with self._session_factory() as session:

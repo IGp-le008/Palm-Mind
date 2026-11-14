@@ -8,12 +8,11 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from app.api.documents import router as documents_router
+from app.container import Container
 from app.core.config import settings
 from app.core.exceptions import AppError
 from app.core.logging import get_logger, setup_logging
-from app.container import Container
-
-from app.api.documents import router as documents_router
 
 logger = get_logger(__name__)
 

@@ -20,7 +20,7 @@ from app.extraction.pdf_extractor import PdfExtractor
 from app.extraction.txt_extractor import TxtExtractor
 from app.services.file_validator import FileKind
 from app.services.ingestion_service import IngestionService
-from app.vectorstore.base import ChunkRecord, chunk_point_id, SearchHit
+from app.vectorstore.base import ChunkRecord, SearchHit, chunk_point_id
 
 TEXT = "\n\n".join(
     f"Paragraph {i} has enough filler words to force several chunks in the test." for i in range(12)
