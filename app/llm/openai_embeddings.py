@@ -23,13 +23,6 @@ class OpenAIEmbeddingProvider:
         self._model = model
         self._dimension = dimension
 
-    @classmethod
-    def from_settings(cls, config: Settings) -> OpenAIEmbeddingProvider:
-        """Build the provider from environment-backed settings."""
-        config.validate_for_embeddings()
-        client = AsyncOpenAI(api_key=config.effective_embedding_key, base_url=config.base_url)
-        return cls(client, config.embedding_model, config.embedding_dim)
-
     async def embed(self, texts: list[str]) -> list[list[float]]:
         if not texts:
             return []
