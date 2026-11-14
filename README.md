@@ -145,7 +145,6 @@ palm-mind-rag/
 ├── docs/
 │   └── DECISIONS.md               # Design decisions and trade-offs
 ├── AGENTS.md
-├── TODO.md
 ├── README.md
 ├── docker-compose.yml
 ├── .env.example
@@ -359,14 +358,3 @@ Response:
 
 See `docs/DECISIONS.md` for trade-offs.
 
----
-
-## 7. Submission checklist
-
-- [ ] Repository is accessible to the recruiter (or zipped as requested)
-- [ ] README setup works on a fresh clone
-- [ ] Both APIs demonstrated end to end (`scripts/demo.http`)
-- [ ] `.env` is not committed; `.env.example` is
-- [ ] `ruff`, `mypy`, and `pytest` pass
-- [ ] Constraints verified: no FAISS, no Chroma, no RetrievalQAChain, no UI
-- [ ] Deadline and any extra deliverables confirmed with Palm Mind AI
