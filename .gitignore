@@ -21,3 +21,9 @@ uploads/
 *.code-workspace
 
 TODO.md 
+
+.agents
+.aws
+.codex
+
+coverage

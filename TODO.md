@@ -15,18 +15,18 @@ Work top to bottom. Tick items as they are completed (`- [x]`). Each item should
 ## Phase 1: Core scaffolding
 - [x] `app/core/config.py`: `Settings` via pydantic-settings, with validation for all env vars
 - [x] `app/core/logging.py`: structured logging setup
-- [U] `app/core/exceptions.py`: domain exceptions (`UnsupportedFileType`, `FileTooLarge`, `IngestionFailed`, `SessionNotFound`, `BookingValidationError`, `ProviderError`)
-- [U] `app/main.py`: FastAPI app factory, router registration, exception handlers, `/health` endpoint
-- [U] `app/core/container.py`: dependency wiring (settings, DB session, Redis client, vector store, providers)
-- [ ] Database engine and session factory (`app/db/session.py`)
-- [ ] Alembic initialised, first migration created
+- [x] `app/core/exceptions.py`: domain exceptions (`UnsupportedFileType`, `FileTooLarge`, `IngestionFailed`, `SessionNotFound`, `BookingValidationError`, `ProviderError`)
+- [x] `app/main.py`: FastAPI app factory, router registration, exception handlers, `/health` endpoint
+- [x] `app/core/container.py`: dependency wiring (settings, DB session, Redis client, vector store, providers)
+- [x] Database engine and session factory (`app/db/session.py`)
+- [x] Alembic initialised, first migration created
 
 ## Phase 2: Persistence layer
-- [ ] ORM model `Document` (id, filename, content_type, size_bytes, sha256, strategy, chunk_count, status, error, created_at, updated_at)
-- [ ] ORM model `InterviewBooking` (id, session_id, name, email, date, time, status, created_at) with unique (email, date, time)
-- [ ] `DocumentRepository` with create, update_status, get_by_id, list
-- [ ] `BookingRepository` with create, exists, list_by_session
-- [ ] Repository unit tests against a test database
+- [x] ORM model `Document` (id, filename, content_type, size_bytes, sha256, strategy, chunk_count, status, error, created_at, updated_at)
+- [x] ORM model `InterviewBooking` (id, session_id, name, email, date, time, status, created_at) with unique (email, date, time)
+- [x] `DocumentRepository` with create, update_status, get_by_id, list
+- [x] `BookingRepository` with create, exists, list_by_session
+- [x] Repository unit tests against a test database
 
 ## Phase 3: Document ingestion
 - [ ] Text extraction for `.txt` (UTF-8 with fallback encoding detection)
