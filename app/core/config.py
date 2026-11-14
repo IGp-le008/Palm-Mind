@@ -51,6 +51,7 @@ class Settings:
     max_upload_mb: int = int(os.getenv("MAX_UPLOAD_MB", "10"))
     chunk_size: int = int(os.getenv("CHUNK_SIZE", "800"))
     chunk_overlap: int = int(os.getenv("CHUNK_OVERLAP", "100"))
+    embedding_batch_size: int = int(os.getenv("EMBEDDING_BATCH_SIZE", "32"))
     semantic_breakpoint_percentile: int = int(os.getenv("SEMANTIC_BREAKPOINT_PERCENTILE", "95"))
 
     # Retrieval
