@@ -6,7 +6,7 @@ This RAG will be responsible for:
 1. Document processing and ingestion
 2. Vector database and semantic search
 3. Custom RAG for ground answering
-4. Conversational memeory
+4. Conversational memory
 5. Interview appointment booking system
 
 ## Schema
@@ -60,13 +60,13 @@ No FAISS, no Chroma, no RetrievalQAChain, no UI.
 |---|---|---|
 | Language | Python 3.11+ | Standard for ML/LLM backends |
 | Web framework | FastAPI | Async, typed, automatic OpenAPI docs |
-| Validation and config | Pydantic v2, pydantic-settings | Typed DTOs and env config |
+| Validation and config | Pydantic v2, dotenv-backed `Settings` | Typed DTOs and environment config |
 | SQL database | PostgreSQL (SQLite for quick local runs) | Metadata and bookings |
 | ORM and migrations | SQLAlchemy 2.x (async), Alembic | Industry standard |
 | Vector database | Qdrant (Docker) | Free, local, simple API. Pinecone/Weaviate/Milvus also allowed |
 | Chat memory | Redis (`redis.asyncio`) | Fast TTL-based session storage |
-| Embeddings | Nvidia `nvidia/nemotron-3.5-embed-1b:free` (or `sentence-transformers/all-MiniLM-L6-v2` for free local use) | Good quality, cheap |
-| LLM | Nvidia `nvidia/nemotron-3.5-lightning:free` (or OpenAI / Groq / Gemini free tier) | Function calling for booking extraction |
+| Embeddings | OpenRouter model configured by `EMBEDDING_MODEL` | Configurable provider |
+| LLM | OpenRouter model configured by `CHAT_MODEL` | Response generation and structured booking extraction |
 | PDF parsing | pypdf | Pure Python, no system deps |
 | HTTP client | httpx | Async, used for provider calls |
 | Testing | pytest, pytest-asyncio, httpx.AsyncClient | Standard |
@@ -164,7 +164,7 @@ palm-mind-rag/
 - Docker and Docker Compose (for Postgres, Redis, Qdrant)
 - `uv` package manager (`pip install uv` or see docs.astral.sh/uv)
 - Git
-- An OpenAI API key 
+- An OpenRouter-compatible API key (chat and embedding keys may be separate)
 
 ### Python dependencies
 
@@ -193,13 +193,21 @@ Dev:
 | `REDIS_URL` | `redis://localhost:6379/0` | Chat memory |
 | `QDRANT_URL` | `http://localhost:6333` | Vector DB |
 | `QDRANT_COLLECTION` | `documents` | Collection name |
-| `OPENAI_API_KEY` | `sk-...` | Embeddings and chat |
+| `CHAT_API_KEY` | `...` | Chat model access |
+| `EMBEDDING_API_KEY` | `...` | Embedding model access; falls back to `CHAT_API_KEY` |
+| `BASE_URL` | `https://openrouter.ai/api/v1` | OpenAI-compatible provider URL |
 | `EMBEDDING_MODEL` | `nvidia/nemotron-3.5-embed-1b:free` | Embedding model |
-| `EMBEDDING_DIM` | `1536` | Must match the model |
+| `EMBEDDING_DIM` | `2048` | Must match the configured embedding model |
 | `CHAT_MODEL` | `nvidia/nemotron-3.5-lightning:free` | Generation model |
 | `MAX_UPLOAD_MB` | `10` | Upload size limit |
 | `CHAT_HISTORY_TURNS` | `10` | Turns kept in Redis |
 | `CHAT_TTL_SECONDS` | `86400` | Session expiry |
+| `CHUNK_SIZE` | `800` | Maximum chunk size |
+| `CHUNK_OVERLAP` | `100` | Chunk overlap |
+| `EMBEDDING_BATCH_SIZE` | `32` | Embeddings per provider request |
+| `RETRIEVAL_K` | `5` | Number of chunks retrieved |
+| `RETRIEVAL_SCORE_THRESHOLD` | `0.0` | Minimum retrieval score |
+| `LLM_TIMEOUT_SECONDS` | `30` | Provider request timeout |
 | `BUSINESS_HOURS_START` | `09:00` | Booking window start |
 | `BUSINESS_HOURS_END` | `18:00` | Booking window end |
 
@@ -264,7 +272,7 @@ curl -X POST http://localhost:8000/api/v1/documents \
 
 `chunking_strategy` is `semantic` or `recursive`.
 
-Response `202 Accepted`:
+Response `201 Created`:
 ```json
 {
   "id": "3f2c9e1a-7b4d-4c1e-9a8f-2d1b6e0c5a11",
@@ -328,6 +336,16 @@ curl -X POST http://localhost:8000/api/v1/chat \
 - `GET /api/v1/chat/{session_id}/history`
 - `DELETE /api/v1/chat/{session_id}` (clears Redis memory)
 - `GET /api/v1/bookings` (lists stored bookings)
+
+**List bookings**
+```bash
+curl "http://localhost:8000/api/v1/bookings?limit=20&offset=0"
+```
+
+Response:
+```json
+{"items": [], "limit": 20, "offset": 0}
+```
 
 ---
 

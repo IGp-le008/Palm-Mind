@@ -17,7 +17,7 @@ Backend-only Python service with two REST APIs, built with FastAPI:
 - Chat memory must use **Redis**. Do not use in-process dicts or files for chat history.
 - The RAG orchestration must be written by us: retrieval, prompt assembly, history handling and generation are explicit functions/classes in `app/services/`. LangChain loaders/splitters/SDK wrappers are allowed, but the chain itself must not be a prebuilt QA chain.
 - Code must be modular and follow industry standards for typing and annotations: every function and method has full type hints, `mypy --strict` must pass.
-- Never hardcode secrets. All config comes from environment variables via `pydantic-settings`.
+- Never hardcode secrets. Current configuration is loaded by `app/core/config.py` from dotenv/environment values into the `Settings` dataclass.
 
 ## 3. Architecture rules
 
@@ -34,7 +34,8 @@ api  ->  services  ->  repositories / vectorstore / llm / chunking  ->  db / cor
 - `app/vectorstore/`: an abstract `VectorStore` protocol plus a `QdrantVectorStore` implementation.
 - `app/llm/`: `EmbeddingProvider` and `ChatModel` protocols plus concrete providers.
 - `app/chunking/`: `ChunkingStrategy` protocol with two implementations (see section 5).
-- `app/core/`: settings, logging, exceptions, dependency container.
+- `app/extraction/`: text extraction protocol plus PDF and TXT implementations.
+- `app/core/`: settings, logging, and exceptions. Dependency wiring is in `app/container.py`.
 - Depend on abstractions (`Protocol`s) in services, not on concrete providers.
 
 ## 4. Coding standards
@@ -47,7 +48,7 @@ api  ->  services  ->  repositories / vectorstore / llm / chunking  ->  db / cor
 - Docstrings: Google style on public classes and functions.
 - Errors: define domain exceptions in `app/core/exceptions.py`; map them to HTTP responses in one exception handler. Never leak stack traces to clients.
 - Logging: use `logging.getLogger(__name__)`. No `print`. Never log raw document content, API keys, or full emails at INFO level.
-- Config: read everything through `app/core/config.py` (`Settings` class). Do not call `os.getenv` elsewhere.
+- Config: read everything through `app/core/config.py` (`Settings` class); application modules do not read environment variables directly.
 - Keep functions small (aim for < 40 lines) and classes single-purpose.
 - No dead code, no commented-out code, no TODO without a linked item in `TODO.md`.
 
