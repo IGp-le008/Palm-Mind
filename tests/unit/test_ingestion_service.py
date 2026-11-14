@@ -32,8 +32,10 @@ class FakeEmbedder:
 
     def __init__(self, failures: int = 0) -> None:
         self._failures_left = failures
+        self.batch_sizes: list[int] = []
 
     async def embed(self, texts: list[str]) -> list[list[float]]:
+        self.batch_sizes.append(len(texts))
         if self._failures_left > 0:
             self._failures_left -= 1
             raise ProviderError("Embedding provider request failed.")
@@ -88,6 +90,7 @@ def _service(
         vector_store=store,
         max_upload_bytes=1024 * 1024,
         embedding_batch_size=4,
+        retry_multiplier=0,
     )
 
 
@@ -133,3 +136,21 @@ async def test_permanent_provider_failure_marks_document_failed(
         document = (await session.execute(select(Document))).scalar_one()
     assert document.status == DocumentStatus.FAILED.value
     assert document.error == "Embedding provider request failed."
+
+
+async def test_embeds_chunks_in_requests_of_batch_size(
+    session_factory: async_sessionmaker[AsyncSession],
+) -> None:
+    embedder = FakeEmbedder()
+    service = _service(session_factory, FakeVectorStore(), embedder)
+
+    result = await service.ingest(
+        filename="notes.txt",
+        declared_mime="text/plain",
+        data=TEXT.encode(),
+        strategy=ChunkingStrategyKind.RECURSIVE,
+    )
+
+    full, remainder = divmod(result.chunk_count, 4)
+    expected = [4] * full + ([remainder] if remainder else [])
+    assert embedder.batch_sizes == expected

@@ -49,7 +49,6 @@ class IngestionService:
     so a failure leaves the `failed` status and error message visible to later reads.
     Files rejected by validation never create a document row.
     """
-
     def __init__(
         self,
         *,
@@ -60,6 +59,7 @@ class IngestionService:
         vector_store: VectorStore,
         max_upload_bytes: int,
         embedding_batch_size: int,
+        retry_multiplier: float = 0.5,
     ) -> None:
         if embedding_batch_size <= 0:
             raise ValueError("embedding_batch_size must be positive.")
@@ -70,6 +70,7 @@ class IngestionService:
         self._vector_store = vector_store
         self._max_upload_bytes = max_upload_bytes
         self._batch_size = embedding_batch_size
+        self._retry_multiplier = retry_multiplier
 
     async def ingest(
         self,
@@ -138,7 +139,7 @@ class IngestionService:
         retrying = AsyncRetrying(
             retry=retry_if_exception_type(ProviderError),
             stop=stop_after_attempt(_MAX_EMBED_ATTEMPTS),
-            wait=wait_exponential(multiplier=0.5, max=8),
+            wait=wait_exponential(multiplier=self._retry_multiplier, max=8),
             reraise=True,
         )
         return await retrying(self._embedder.embed, batch)
