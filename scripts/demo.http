@@ -1,0 +1,152 @@
+### Health
+GET http://localhost:8000/health
+
+### 1. Upload a text document (recursive chunking)
+# @name uploadText
+POST http://localhost:8000/api/v1/documents
+Content-Type: multipart/form-data; boundary=DemoBoundary
+
+--DemoBoundary
+Content-Disposition: form-data; name="file"; filename="policy.txt"
+Content-Type: text/plain
+
+Refunds are processed within 14 days of a returned item being received.
+Customers can request a refund by contacting support with their order number.
+
+Interview bookings are available on weekdays between 09:00 and 18:00.
+--DemoBoundary
+Content-Disposition: form-data; name="chunking_strategy"
+
+recursive
+--DemoBoundary--
+
+###
+
+@documentId = {{uploadText.response.body.id}}
+
+### 2. Upload a text document (semantic chunking)
+# @name uploadSemantic
+POST http://localhost:8000/api/v1/documents
+Content-Type: multipart/form-data; boundary=DemoBoundary
+
+--DemoBoundary
+Content-Disposition: form-data; name="file"; filename="policy.txt"
+Content-Type: text/plain
+
+Refunds are processed within 14 days of a returned item being received.
+Customers can request a refund by contacting support with their order number.
+
+Interview bookings are available on weekdays between 09:00 and 18:00.
+--DemoBoundary
+Content-Disposition: form-data; name="chunking_strategy"
+
+semantic
+--DemoBoundary--
+
+###
+
+@semanticDocumentId = {{uploadSemantic.response.body.id}}
+
+### 3. Read one document
+GET http://localhost:8000/api/v1/documents/{{documentId}}
+
+### 4. List documents with pagination
+GET http://localhost:8000/api/v1/documents?limit=5&offset=0
+
+### 5. Ask a question
+# @name firstQuestion
+POST http://localhost:8000/api/v1/chat
+Content-Type: application/json
+
+{
+  "message": "How long do refunds take?",
+  "document_id": "{{documentId}}"
+}
+
+###
+
+@sessionId = {{firstQuestion.response.body.session_id}}
+
+### 6. Ask a follow-up in the same session
+POST http://localhost:8000/api/v1/chat
+Content-Type: application/json
+
+{
+  "session_id": "{{sessionId}}",
+  "message": "And what about the cost?",
+  "document_id": "{{documentId}}"
+}
+
+### 7. Read the session history
+GET http://localhost:8000/api/v1/chat/{{sessionId}}/history
+
+### 8. Start a booking
+# @name startBooking
+POST http://localhost:8000/api/v1/chat
+Content-Type: application/json
+
+{
+  "message": "I want to book an interview"
+}
+
+###
+
+@bookingSession = {{startBooking.response.body.session_id}}
+
+### 9. Give name and email
+POST http://localhost:8000/api/v1/chat
+Content-Type: application/json
+
+{
+  "session_id": "{{bookingSession}}",
+  "message": "My name is Ana Demo and my email is ana.demo@example.com"
+}
+
+### 10. Give the date and time (must be today or later, 15 Nov 2026 or after)
+POST http://localhost:8000/api/v1/chat
+Content-Type: application/json
+
+{
+  "session_id": "{{bookingSession}}",
+  "message": "On 2026-11-20 at 10:00"
+}
+
+### 11. Confirm the booking
+POST http://localhost:8000/api/v1/chat
+Content-Type: application/json
+
+{
+  "session_id": "{{bookingSession}}",
+  "message": "yes"
+}
+
+### 12. List bookings
+GET http://localhost:8000/api/v1/bookings?limit=5&offset=0
+
+### 13. Clear the chat session
+DELETE http://localhost:8000/api/v1/chat/{{sessionId}}
+
+### 14. Delete both documents
+DELETE http://localhost:8000/api/v1/documents/{{documentId}}
+
+###
+
+DELETE http://localhost:8000/api/v1/documents/{{semanticDocumentId}}
+
+### 15. Error: unsupported file type (expect 415)
+POST http://localhost:8000/api/v1/documents
+Content-Type: multipart/form-data; boundary=DemoBoundary
+
+--DemoBoundary
+Content-Disposition: form-data; name="file"; filename="photo.png"
+Content-Type: image/png
+
+not really a png
+--DemoBoundary
+Content-Disposition: form-data; name="chunking_strategy"
+
+recursive
+--DemoBoundary--
+
+### 16. Error: unknown document (expect 404)
+GET http://localhost:8000/api/v1/documents/00000000-0000-0000-0000-000000000000
