@@ -251,9 +251,9 @@ Dev:
 ### 4.1 Clone and install
 
 ```bash
-git clone <your-repo-url> palm-mind-rag
+git clone https://github.com/IGp-le008/Palm-Mind palm-mind-rag
 cd palm-mind-rag
-cp .env.example .env          # then fill in OPENAI_API_KEY
+cp .env.example .env          # then fill in API_KEYS
 uv sync                       # installs runtime and dev deps from pyproject.toml
 ```
 
